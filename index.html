@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/styles.css') }}">
+    <title>Fórum</title>
+</head>
+<body>
+    <div class="container">
+        <h1>Fórum</h1>
+        <button id="open-popup"><img src="https://w7.pngwing.com/pngs/608/974/png-transparent-message-square-others-miscellaneous-angle-text.png" width="50px"</button>
+    
+    
+
+        <div id="popup" class="popup">
+            <div class="popup-content">
+                <span class="" ><img src="https://cdn.bemcolar.com/media/catalog/product/cache/1/image/9df78eab33525d08d6e5fb8d27136e95/p/a/papel-de-parede-linhas-geometricas-adesivo_1.jpg" width="300px"</span>
+                <form id="message-form">
+                    <textarea name="content" placeholder="Escreva sua mensagem..." required></textarea>
+                    <div id="buttons">
+                    <button type="submit">></button>
+                    <button id="close-popup">Fechar</button>
+                    </div>
+                </form>
+            </div>
+          
+        </div>
+
+        
+    </div>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/firebase/11.0.1/firebase-app.js"></script>
+<script>
+        document.getElementById('open-popup').onclick = function() {
+            document.getElementById('popup').style.display = 'block';
+        };
+
+       document.getElementById('close-popup').onclick = function() {
+           document.getElementById('popup').style.display = 'none';
+       };
+
+        
+
+   
+       
+        document.getElementById('message-form').onsubmit = function(event) {
+            event.preventDefault();
+            const content = this.content.value;
+
+            fetch('/add_message', {
+                method: 'POST',
+                body: new URLSearchParams({ 'content': content })
+            })
+            .then(response => response.json())
+            .then(data => {
+                const messagesDiv = document.getElementById('messages');
+                messagesDiv.innerHTML += `<div class="message">${data.content}</div>`;
+                this.reset();
+                document.getElementById('popup').style.display = 'none';
+            });
+        };
+    </script>
+</body>
+</html>
